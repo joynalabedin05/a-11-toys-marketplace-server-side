@@ -32,6 +32,14 @@ async function run() {
         const cursor = toysCollection.find();
         const result = await cursor.toArray();
         res.send(result);
+    });
+
+    app.get('/toydetail/:id',async(req,res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)};
+      const result = await toysCollection.findOne(query);
+      res.send(result) ;
+      // console.log(id);
     })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -42,8 +50,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
-
 
 app.get('/',(req,res)=>{
     res.send('toys is running');
