@@ -29,7 +29,7 @@ async function run() {
 
     const toysCollection = client.db('allToys').collection('toys');
     app.get('/alltoys', async(req,res)=>{
-        const cursor = toysCollection.find();
+        const cursor = toysCollection.find().sort({price: 1});
         const result = await cursor.toArray();
         res.send(result);
     });
@@ -40,6 +40,20 @@ async function run() {
       const result = await toysCollection.findOne(query);
       res.send(result) ;
       // console.log(id);
+    });
+
+    app.get("/getJobsByText/:text", async (req, res) => {
+      const text = req.params.text;
+      const result = await toysCollection
+        .find({
+          $or: [
+            { toy_name: { $regex: text, $options: "i" } },
+            { sub_category: { $regex: text, $options: "i" } },
+            { name: { $regex: text, $options: "i" } },
+          ],
+        })
+        .toArray();
+      res.send(result);
     });
 
     app.post('/bookings',async(req,res)=>{
