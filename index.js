@@ -34,6 +34,16 @@ async function run() {
         res.send(result);
     });
 
+    app.get("/myJobs/:email", async (req, res) => {
+      console.log(req.params.email);
+      const jobs = await toysCollection
+        .find({
+          email: req.params.email,
+        })
+        .sort({price: 1}).toArray();
+      res.send(jobs);
+    });
+
     app.get('/toydetail/:id',async(req,res)=>{
       const id = req.params.id;
       const query = {_id: new ObjectId(id)};
